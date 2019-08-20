@@ -127,26 +127,22 @@ main(int argc, char *argv[])
     }
 
     mostreTurtledorm(lin, col, dorm, ACORDADO);
-
     int continuar = TRUE;
-    char comando[MAX];
+    char auxiliar;
     int x, y;
     while(continuar){
       printf("Digite sua próxima jogada: ");
-      scanf("%s", comando);
-      if(strlen(comando) > 1){
-        x = comando[0] - '0';
-        y = comando[2] - '0';
+
+      if(scanf("%d %d", &x, &y)){
         tapinhaTurtle(lin, col, dorm, x, y);
         mostreTurtledorm(lin, col, dorm, ACORDADO);
       }
-      else{
-        char auxiliar = comando[0];
+      else if(scanf(" %c\n", &auxiliar)){
         if(auxiliar == 'a'){
           resolvaTurtledorm(lin, col, dorm);
        }
         else if(auxiliar == 'g'){
-          graveTurtledorm(lin, col, dorm);       
+          graveTurtledorm(lin, col, dorm);      
         }
         else{
           printf("Voce desistiu da partida\n");
@@ -154,7 +150,8 @@ main(int argc, char *argv[])
           pause();
         }
       }
-      if(todosDormindo(lin, col, dorm)){
+
+       if(todosDormindo(lin, col, dorm)){
         printf("Parabéns, voce terminou o jogo!");
         continuar = FALSE;
         pause();
@@ -290,6 +287,7 @@ void sorteieTurtledorm(int *nLin, int *nCol, int tDorm[][MAX]){
   for(int k = 0; k < nTapinhas; k++){
     tapinhaTurtle(*nLin, *nCol, tDorm, randomInteger(1, (*nLin)), randomInteger(1, (*nCol)));
   }
+
 }
 
 
@@ -360,6 +358,7 @@ randomInteger(int low, int high)
 void 
 pause()
 {
+    setbuf(stdin, NULL);
     char ch;
 
     printf("Digite ENTER para continuar. ");
