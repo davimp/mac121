@@ -142,7 +142,13 @@ freeImagem(Imagem *img)
 void 
 freeRegioes(CelRegiao *iniRegioes)
 {
-  
+  int n = (*iniRegioes).nPixels;
+  CelRegiao prox = (*iniRegioes).proxRegiao;
+  int i = n - 1;
+  for(i = n - 1; i >= 0; i--){ free((*((*iniRegioes).iniPixels + i)).proxPixel); (*((*iniRegioes).iniPixels + i)).proxPixel = NULL;}
+  free((*iniRegioes).iniPixels);
+  free(iniRegioes);
+  if(prox != NULL){ freeRegioes(prox); free(prox); prox = NULL}
   AVISO(imagem: Vixe! Ainda nao fiz a funcao freeRegioes);
 }
 
