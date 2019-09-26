@@ -64,6 +64,12 @@ main(int argc, char *argv[])
     Imagem *tela          = NULL; /* ponteiro para a imagem corrente ou atual */
     CelRegiao *iniRegioes = NULL; /* ponteiro para a lista de regioes */
 
+
+    if(argc != 2){
+        mostreUso(argv[0]);
+        return 0;
+    }
+
     /* 1. pegue da linha de comando o nome do arquivo com a imagem */
 
     char * nome_arquivo;
@@ -71,38 +77,19 @@ main(int argc, char *argv[])
 
     /* 2. carregue de uma arquivo, no formato PPM, a imagem original */
 
-    imgOriginal = carregueImagemPPM(nome_arquivo);
-
-    if (imgOriginal == NULL)
-    {
-        AVISO(main: Vixe! ainda nao li a imagem original.);
-        return 0;    
-    }
+    imgOriginal = carregueImagemPPM(argv[1]);
   
     /* 3 crie a imagem corrente (tela) em que trabalharemos */
 
-    tela = mallocImagem((*imgOriginal).width, (*imgOriginal).height);
+    tela = mallocImagem(imgOriginal->width, imgOriginal->height);
 
     /* 4 copie a imagem original (lida) para a imagem corrente (tela) */ 
 
     copieImagem(imgOriginal, tela);
 
-    if (tela == NULL) 
-    {
-        AVISO(main: Vixe! ainda nao criei a imagem corrente.);
-        return 0;    
-    }
-
     /* 5 segmente a imagem corrente (tela) criando a lista de regioes */
 
     iniRegioes = segmenteImagem(tela, LIMIAR);
-
-    if (iniRegioes == NULL) 
-    {
-        AVISO(main: Vixe! ainda nao segmentei a imagem.);
-        /* apesar disso ainda e possivel visualizar a imagem lida,
-           vamos em frente */
-    }
 
     /* 6 passe a bola para a parte grafica */  
     myInit(&argc, argv, tela, imgOriginal, iniRegioes);
@@ -141,7 +128,7 @@ quit(Imagem *tela, Imagem *img, CelRegiao *iniRegioes)
     freeImagem(tela);
     freeImagem(img);
     freeRegioes(iniRegioes);
-    AVISO(main.c: Vixe Ainda nao fiz a funcao quit.);
+    /*AVISO(main.c: Vixe Ainda nao fiz a funcao quit.);*/
     exit(EXIT_SUCCESS); /* a execução do programa termina neste ponto */
 }
 
@@ -164,11 +151,10 @@ quit(Imagem *tela, Imagem *img, CelRegiao *iniRegioes)
 void
 graveImagem(Imagem *img)
 {
-    char * arquivo_saida;
+    char arquivo_saida[MAX_NOME];
     printf("Digite o nome do arquivo para guardar a imagem: ");
     scanf("%s", arquivo_saida);
     graveImagemPPM(arquivo_saida, img);
-    AVISO(main.c: Vixe Ainda nao fiz a funcao graveImagem.);
 }
 
 /*---------------------------------------------------------------*/
