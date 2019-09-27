@@ -348,7 +348,7 @@ pinteRegioes(Imagem *img, CelRegiao *iniRegioes, Bool borda)
 
 void
 repinteRegiao(Imagem *img, int col, int lin, Byte cor[])
-{/*
+{
   CelRegiao *reg;
   CelPixel *p;
   reg = img->pixel[lin][col].regiao;
@@ -358,9 +358,9 @@ repinteRegiao(Imagem *img, int col, int lin, Byte cor[])
   reg->cor[2] = cor[2];
   for(; p!= NULL; p = p->proxPixel){
     setPixel(img, p->col, p->lin, cor);
-  }*/
-
-  AVISO(imagem: Vixe! Ainda nao fiz a funcao pinteRegiao.);
+  }
+/*
+  AVISO(imagem: Vixe! Ainda nao fiz a funcao pinteRegiao.);*/
 }
 
 /*------------------------------------------------------------- 
@@ -398,8 +398,8 @@ repinteRegioes(Imagem *img, CelRegiao *iniRegioes, int col, int lin,
       repinteRegiao(img, r->iniPixels->col, r->iniPixels->lin, cor);
       r->cor[0] = cor[0]; r->cor[1] = cor[1]; r->cor[2] = cor[2];
     }
-  }
-  /*AVISO(imagem: Vixe! Ainda nao fiz a funcao pinteRegioes.);*/
+  }/*
+  AVISO(imagem: Vixe! Ainda nao fiz a funcao pinteRegioes.);*/
 }
 
 /*------------------------------------------------------------- 
@@ -682,22 +682,21 @@ pixelsRegiao(Imagem *img, int limiar, int col, int lin, CelRegiao *regiao)
   int xm[8] = {1, -1, 0, 0, 1, 1, -1, -1}, ym[8] = {0, 0, 1, -1, 1, -1, 1, -1};
   int k = 0;
   int x, y;
-  Bool bor = pixelBorda(img, limiar, col, lin);
   int novas = 0;
   CelPixel *aux;
+  img->pixel[lin][col].regiao = regiao;
   aux = mallocSafe(sizeof(CelPixel));
   aux->lin = lin;
   aux->col = col;
   aux->proxPixel = regiao->iniPixels;
   regiao->iniPixels = aux;
-  if(bor){
+  if(regiao->borda){
     for(k = 0; k < 8; k++){
       x = lin + xm[k];
       y = col + ym[k];
       if(x >= 0 && y >= 0 && y < (img->width) && x < (img->height)){
         if(pixelBorda(img, limiar, y, x)){
-          if(img->pixel[y][x].regiao == NULL){
-            img->pixel[y][x].regiao = regiao;
+          if(img->pixel[x][y].regiao == NULL){
             novas += 1;
             novas += pixelsRegiao(img, limiar, y, x, regiao);
           }
@@ -711,8 +710,8 @@ pixelsRegiao(Imagem *img, int limiar, int col, int lin, CelRegiao *regiao)
       y = col + ym[k];
       if(x >= 0 && y >= 0 && y < (img->width) && x < (img->height)){
         if(!pixelBorda(img, limiar, y, x)){
-           if(img->pixel[y][x].regiao == NULL){
-            img->pixel[y][x].regiao = regiao;
+           if(img->pixel[x][y].regiao == NULL){
+            img->pixel[x][y].regiao = regiao;
             novas += 1;
             novas += pixelsRegiao(img, limiar, y, x, regiao);
           }
@@ -720,9 +719,9 @@ pixelsRegiao(Imagem *img, int limiar, int col, int lin, CelRegiao *regiao)
       }
     }
   }
-  return novas;
-  /*AVISO(imagem: Vixe! Ainda nao fiz a funcao pixelsRegiao.);
-  return 0;*/
+  return novas;/*
+  AVISO(imagem: Vixe! Ainda nao fiz a funcao pixelsRegiao.);
+  return 0;/*/
 }
  
 
