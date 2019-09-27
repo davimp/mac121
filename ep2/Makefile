@@ -3,15 +3,15 @@ UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin) # Se for MACOS
 	GLLIB = -framework OpenGL -framework GLUT -framework Cocoa
 else 
-	GLLIB = -lGL -lGLU -lglut
+	GLLIB = -lGL -lGLU -lglut -lm
 endif
 CC     = gcc
-CFLAGS = -Wall -g -O2 -std=c99 -pedantic -Wno-unused-result -Wno-deprecated-declarations
+CFLAGS = -Wall -O2 -std=c99 -pedantic -Wno-unused-result -Wno-deprecated-declarations
 
 #------------------------------------------------
 
 ep2: main.o graphic.o imagem.o io.o
-	$(CC) -g main.o graphic.o imagem.o io.o -o ep2 $(GLLIB)
+	$(CC) main.o graphic.o imagem.o io.o -o ep2 $(GLLIB)
 
 main.o: main.c imagem.h graphic.h io.h  
 	$(CC) $(CFLAGS) -c main.c 

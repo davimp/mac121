@@ -85,7 +85,7 @@ main(int argc, char *argv[])
 
     /* 4 copie a imagem original (lida) para a imagem corrente (tela) */ 
 
-    copieImagem(imgOriginal, tela);
+    copieImagem(tela, imgOriginal);
 
     /* 5 segmente a imagem corrente (tela) criando a lista de regioes */
 

@@ -85,7 +85,6 @@ luminosidadePixel(Imagem *img, int col, int lin);
   Esta funcao utiliza a funcao mallocSafe.
 */
 
-/*
 Imagem *
 mallocImagem(int width, int height)
 {
@@ -97,26 +96,6 @@ mallocImagem(int width, int height)
   novo->pixel = mallocSafe(height*sizeof(Pixel *));
   for(i = 0; i < height; i++) novo->pixel[i] = mallocSafe(width*sizeof(Pixel));
   return novo;
-}*/
-
-Imagem *
-mallocImagem(int width, int height)
-{
-    Imagem * img;
-    Pixel ** pixels;
-    int i;
-
-    img = (Imagem *)mallocSafe(sizeof(Imagem));
-    pixels = (Pixel **)mallocSafe(height*sizeof(Pixel *));
-    
-    for(i = 0; i < height; i++)
-        pixels[i] = (Pixel *)mallocSafe(width*sizeof(Pixel));
-    
-    img->pixel = pixels;
-    img->width = width;
-    img->height = height;
-
-    return img;
 }
 
 
@@ -205,7 +184,7 @@ copieImagem(Imagem *destino, Imagem *origem)
   int i = 0, j = 0;
   for(i = 0; i < l; i++){
     for(j = 0; j < c; j++){
-      (*destino).pixel[i][j] = (*origem).pixel[i][j];
+      destino->pixel[i][j] = origem->pixel[i][j];
     }
   }
   /*AVISO(imagem: Vixe! Ainda nao fiz a funcao copieImagem.);*/
@@ -228,13 +207,6 @@ getPixel(Imagem *img, int col, int lin)
 {
   Pixel pixel;
   pixel = img->pixel[lin][col];
-  /* 
-     O objetivo das linhas de codigo a seguir e evitar que 
-     ocorra erro de sintaxe durante a fase de desenvolvimento 
-     do EP. Essas linhas deverao ser removidas depois que
-     a funcao estiver pronta.
-  */
-  /*AVISO(imagem: Vixe! Ainda nao fiz a funcao getPixel.);*/
   return pixel;    
 }
 
@@ -254,7 +226,6 @@ setPixel(Imagem *img, int col, int lin, Byte cor[])
   img->pixel[lin][col].cor[0] = cor[0];
   img->pixel[lin][col].cor[1] = cor[1];
   img->pixel[lin][col].cor[2] = cor[2];
-  /*AVISO(imagem: Vixe! Ainda nao fiz a funcao setPixel.);*/
 }
 
 /*-------------------------------------------------------------
@@ -377,7 +348,7 @@ pinteRegioes(Imagem *img, CelRegiao *iniRegioes, Bool borda)
 
 void
 repinteRegiao(Imagem *img, int col, int lin, Byte cor[])
-{
+{/*
   CelRegiao *reg;
   CelPixel *p;
   reg = img->pixel[lin][col].regiao;
@@ -387,9 +358,9 @@ repinteRegiao(Imagem *img, int col, int lin, Byte cor[])
   reg->cor[2] = cor[2];
   for(; p!= NULL; p = p->proxPixel){
     setPixel(img, p->col, p->lin, cor);
-  }
+  }*/
 
-  /*AVISO(imagem: Vixe! Ainda nao fiz a funcao pinteRegiao.);*/
+  AVISO(imagem: Vixe! Ainda nao fiz a funcao pinteRegiao.);
 }
 
 /*------------------------------------------------------------- 
@@ -417,13 +388,13 @@ void
 repinteRegioes(Imagem *img, CelRegiao *iniRegioes, int col, int lin, 
                Byte cor[])
 {
-  Byte * original;
+  Byte * original = NULL;
   CelRegiao *r;
   original[0] = iniRegioes->cor[0];
   original[1] = iniRegioes->cor[1];
   original[2] = iniRegioes->cor[2];
   for(r = iniRegioes; r != NULL; r = r->proxRegiao){
-    if(r->cor[0] == original[0] && r->cor[1] == original[1] && r->cor[2] == original[2]){
+    if((r->cor[0] == original[0]) && (r->cor[1] == original[1]) && (r->cor[2] == original[2])){
       repinteRegiao(img, r->iniPixels->col, r->iniPixels->lin, cor);
       r->cor[0] = cor[0]; r->cor[1] = cor[1]; r->cor[2] = cor[2];
     }
@@ -447,42 +418,36 @@ repinteRegioes(Imagem *img, CelRegiao *iniRegioes, int col, int lin,
 static Bool
 pixelBorda(Imagem *img, int limiar, int col, int lin)
 {
-  int xm[4] = {-1, 0, 0, 1}, ym[4] = {1, 1, 1, 1};
+  int xm[4] = {-1, 0, 0, 1};
   int k = 0;
   int l, c;
   double gx = 0, gy = 0;
   /* proximos dois for's calculam gx*/
   for(k = 0; k < 4; k++){
     l = lin + xm[k];
-    c = col + ym[k];
-    if(l >= 0 && l < (*img).height && c >=0 && c < (*img).width)  gx += luminosidadePixel(img, c, l);
+    c = col + 1;
+    if(l >= 0 && l < (*img).height && c >= 0 && c < (*img).width)  gx += luminosidadePixel(img, c, l);
   }
   for(k = 0; k < 4; k++){
     l = lin + xm[k];
-    c = col - ym[k];
-    if(l >= 0 && l < (*img).height && c >=0 && c < (*img).width)  gx -= luminosidadePixel(img, c, l);
+    c = col - 1;
+    if(l >= 0 && l < (*img).height && c >= 0 && c < (*img).width)  gx -= luminosidadePixel(img, c, l);
   }
   /*proximos dois for's calculam gy*/
   for(k = 0; k < 4; k++){
-    l = lin + ym[k];
+    l = lin + 1;
     c = col + xm[k];
-    if(l >= 0 && l < (*img).height && c >=0 && c < (*img).width)  gy += luminosidadePixel(img, c, l);
+    if(l >= 0 && l < (*img).height && c >= 0 && c < (*img).width)  gy += luminosidadePixel(img, c, l);
   }
   for(k = 0; k < 4; k++){
-    l = lin - ym[k];
+    l = lin - 1;
     c = col + xm[k];
-    if(l >= 0 && l < (*img).height && c >=0 && c < (*img).width)  gy += luminosidadePixel(img, c, l);
+    if(l >= 0 && l < (*img).height && c >= 0 && c < (*img).width)  gy -= luminosidadePixel(img, c, l);
   }
 
-  if(gx*gx + gy*gy > limiar*limiar) return TRUE;
+  if(NORMA(gx, gy) > limiar) return TRUE;
   else return FALSE;
-  /* O objetivo do return a seguir e evitar que 
-      ocorra erro de sintaxe durante a fase de desenvolvimento 
-      do EP. Esse return devera ser removido depois que
-      a funcao estiver pronta.
-   */
-  /*AVISO(imagem: Vixe! Ainda nao fiz a funcao pixelBorda.);
-  return FALSE;*/ 
+
 }
 
 /*-------------------------------------------------------------
@@ -574,7 +539,7 @@ pixelBorda(Imagem *img, int limiar, int col, int lin)
 
 CelRegiao *
 segmenteImagem(Imagem *img, int limiar)
-{/*
+{
   CelRegiao * aux = NULL, *ini = NULL;
   Pixel **p;
   p = img->pixel;
@@ -592,13 +557,9 @@ segmenteImagem(Imagem *img, int limiar)
       }
     }
   }
-  return ini;*/
-   /* O objetivo do return a seguir e evitar que 
-      ocorra erro de sintaxe durante a fase de desenvolvimento do EP. 
-      Esse return devera ser removido depois que a funcao estiver pronta.
-   */
-   AVISO(imagem: Vixe! Ainda nao fiz a funcao segmenteImagem.);
-   return NULL;
+  return ini;/*
+  AVISO(imagem: Vixe! Ainda nao fiz a funcao segmenteImagem.);
+  return NULL;*/
 }
 
 /*------------------------------------------------------------- 
@@ -737,7 +698,7 @@ pixelsRegiao(Imagem *img, int limiar, int col, int lin, CelRegiao *regiao)
         if(pixelBorda(img, limiar, y, x)){
           if(img->pixel[y][x].regiao == NULL){
             img->pixel[y][x].regiao = regiao;
-            novas = 1 + pixelsRegiao(img, limiar, y, x, regiao);
+            novas += 1 + pixelsRegiao(img, limiar, y, x, regiao);
           }
         }
       }
@@ -751,20 +712,15 @@ pixelsRegiao(Imagem *img, int limiar, int col, int lin, CelRegiao *regiao)
         if(!pixelBorda(img, limiar, y, x)){
            if(img->pixel[y][x].regiao == NULL){
             img->pixel[y][x].regiao = regiao;
-            novas = 1 + pixelsRegiao(img, limiar, y, x, regiao);
+            novas += 1 + pixelsRegiao(img, limiar, y, x, regiao);
           }
         }
       }
     }
   }
   return novas;
-    /* O objetivo do return a seguir e evitar que 
-       ocorra erro de sintaxe durante a fase de desenvolvimento 
-       do EP. Esse return devera ser removido depois que
-       a funcao estiver pronta.
-    */
-    /*AVISO(imagem: Vixe! Ainda nao fiz a funcao pixelsRegiao.);
-    return 0;*/
+  /*AVISO(imagem: Vixe! Ainda nao fiz a funcao pixelsRegiao.);
+  return 0;*/
 }
  
 
