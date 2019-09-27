@@ -694,11 +694,12 @@ pixelsRegiao(Imagem *img, int limiar, int col, int lin, CelRegiao *regiao)
     for(k = 0; k < 8; k++){
       x = lin + xm[k];
       y = col + ym[k];
-      if(x >= 0 && y >= 0 && y < (img->height) && x < (img->width)){
+      if(x >= 0 && y >= 0 && y < (img->width) && x < (img->height)){
         if(pixelBorda(img, limiar, y, x)){
           if(img->pixel[y][x].regiao == NULL){
             img->pixel[y][x].regiao = regiao;
-            novas += 1 + pixelsRegiao(img, limiar, y, x, regiao);
+            novas += 1;
+            novas += pixelsRegiao(img, limiar, y, x, regiao);
           }
         }
       }
@@ -708,11 +709,12 @@ pixelsRegiao(Imagem *img, int limiar, int col, int lin, CelRegiao *regiao)
     for(k = 0; k < 4; k++){
       x = lin + xm[k];
       y = col + ym[k];
-      if(x >= 0 && y >= 0 && y < (img->height) && x < (img->width)){
+      if(x >= 0 && y >= 0 && y < (img->width) && x < (img->height)){
         if(!pixelBorda(img, limiar, y, x)){
            if(img->pixel[y][x].regiao == NULL){
             img->pixel[y][x].regiao = regiao;
-            novas += 1 + pixelsRegiao(img, limiar, y, x, regiao);
+            novas += 1;
+            novas += pixelsRegiao(img, limiar, y, x, regiao);
           }
         }
       }
