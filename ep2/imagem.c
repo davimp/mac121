@@ -49,7 +49,7 @@
   macros
 */
 #define NORMA(x,y) sqrt(x*x + y*y) 
-
+int xm[8] = {1, -1, 0, 0, 1, 1, -1, -1}, ym[8] = {0, 0, 1, -1, 1, -1, 1, -1};
 /*-------------------------------------------------------------
   Funcoes locais que devem ser escritas
 */
@@ -388,17 +388,21 @@ void
 repinteRegioes(Imagem *img, CelRegiao *iniRegioes, int col, int lin, 
                Byte cor[])
 {
-  Byte * original = NULL;
+  Byte original[3];
   CelRegiao *r;
-  original[0] = iniRegioes->cor[0];
-  original[1] = iniRegioes->cor[1];
-  original[2] = iniRegioes->cor[2];
+  CelRegiao *aux;
+  aux = img->pixel[lin][col].regiao;
+  original[0] = aux->cor[0];
+  original[1] = aux->cor[1];
+  original[2] = aux->cor[2];
+
   for(r = iniRegioes; r != NULL; r = r->proxRegiao){
     if((r->cor[0] == original[0]) && (r->cor[1] == original[1]) && (r->cor[2] == original[2])){
-      repinteRegiao(img, r->iniPixels->col, r->iniPixels->lin, cor);
       r->cor[0] = cor[0]; r->cor[1] = cor[1]; r->cor[2] = cor[2];
+      repinteRegiao(img, r->iniPixels->col, r->iniPixels->lin, cor);
     }
-  }/*
+  }
+  /*
   AVISO(imagem: Vixe! Ainda nao fiz a funcao pinteRegioes.);*/
 }
 
@@ -418,18 +422,18 @@ repinteRegioes(Imagem *img, CelRegiao *iniRegioes, int col, int lin,
 static Bool
 pixelBorda(Imagem *img, int limiar, int col, int lin)
 {
-  int xm[4] = {-1, 0, 0, 1};
+  int v[4] = {-1, 0, 0, 1};
   int k = 0;
   int l, c;
   double gx = 0, gy = 0;
   /* proximos dois for's calculam gx*/
   for(k = 0; k < 4; k++){
-    l = lin + xm[k];
+    l = lin + v[k];
     c = col + 1;
     if(l >= 0 && l < (*img).height && c >= 0 && c < (*img).width)  gx += luminosidadePixel(img, c, l);
   }
   for(k = 0; k < 4; k++){
-    l = lin + xm[k];
+    l = lin + v[k];
     c = col - 1;
     if(l >= 0 && l < (*img).height && c >= 0 && c < (*img).width)  gx -= luminosidadePixel(img, c, l);
   }
@@ -441,7 +445,7 @@ pixelBorda(Imagem *img, int limiar, int col, int lin)
   }
   for(k = 0; k < 4; k++){
     l = lin - 1;
-    c = col + xm[k];
+    c = col + v[k];
     if(l >= 0 && l < (*img).height && c >= 0 && c < (*img).width)  gy -= luminosidadePixel(img, c, l);
   }
 
@@ -545,6 +549,11 @@ segmenteImagem(Imagem *img, int limiar)
   p = img->pixel;
   int i = 0, j = 0, h, w;
   h = img->height; w = img->width;
+
+  for(i = 0; i < h; i++)
+    for(j = 0; j < w; j++)
+      img->pixel[i][j].regiao = NULL;
+
   for(i = 0; i < h; i++){
     for(j = 0; j < w; j++){
       if(p[i][j].regiao == NULL){
@@ -557,9 +566,7 @@ segmenteImagem(Imagem *img, int limiar)
       }
     }
   }
-  return ini;/*
-  AVISO(imagem: Vixe! Ainda nao fiz a funcao segmenteImagem.);
-  return NULL;*/
+  return ini;
 }
 
 /*------------------------------------------------------------- 
@@ -679,24 +686,24 @@ segmenteImagem(Imagem *img, int limiar)
 static int
 pixelsRegiao(Imagem *img, int limiar, int col, int lin, CelRegiao *regiao)
 {
-  int xm[8] = {1, -1, 0, 0, 1, 1, -1, -1}, ym[8] = {0, 0, 1, -1, 1, -1, 1, -1};
   int k = 0;
   int x, y;
   int novas = 0;
   CelPixel *aux;
-  img->pixel[lin][col].regiao = regiao;
   aux = mallocSafe(sizeof(CelPixel));
   aux->lin = lin;
   aux->col = col;
   aux->proxPixel = regiao->iniPixels;
   regiao->iniPixels = aux;
+  img->pixel[lin][col].regiao = regiao;
   if(regiao->borda){
     for(k = 0; k < 8; k++){
-      x = lin + xm[k];
+      x = lin + xm[k];  
       y = col + ym[k];
       if(x >= 0 && y >= 0 && y < (img->width) && x < (img->height)){
         if(pixelBorda(img, limiar, y, x)){
           if(img->pixel[x][y].regiao == NULL){
+            img->pixel[x][y].regiao = regiao;
             novas += 1;
             novas += pixelsRegiao(img, limiar, y, x, regiao);
           }
@@ -719,9 +726,7 @@ pixelsRegiao(Imagem *img, int limiar, int col, int lin, CelRegiao *regiao)
       }
     }
   }
-  return novas;/*
-  AVISO(imagem: Vixe! Ainda nao fiz a funcao pixelsRegiao.);
-  return 0;/*/
+  return novas;
 }
  
 
