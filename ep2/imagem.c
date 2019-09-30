@@ -49,7 +49,7 @@
   macros
 */
 #define NORMA(x,y) sqrt(x*x + y*y) 
-int xm[8] = {1, -1, 0, 0, 1, 1, -1, -1}, ym[8] = {0, 0, 1, -1, 1, -1, 1, -1};
+
 /*-------------------------------------------------------------
   Funcoes locais que devem ser escritas
 */
@@ -286,17 +286,18 @@ pinteImagem(Imagem *img, Byte cor[])
    INIREGIOES que representam regioes que foram pintadas.
 */
 
+int colorir = 0;
 void
 pinteRegioes(Imagem *img, CelRegiao *iniRegioes, Bool borda)
 {
-  int i = 0, j = 0, n = 0;
+  int i = 0, j = 0;
   Byte * cor;
   cor = cores[0];
   if(borda){
     CelRegiao *q; CelPixel *p;
     for(q = iniRegioes; q != NULL; q = q->proxRegiao){
-      n = (n+1)%NUM_CORES;
-      cor = cores[n];
+      colorir = (colorir+1)%NUM_CORES;
+      cor = cores[colorir];
       if(q->borda){
         q->cor[0] = cor[0];
         q->cor[1] = cor[1];
@@ -313,8 +314,8 @@ pinteRegioes(Imagem *img, CelRegiao *iniRegioes, Bool borda)
   else{
     CelRegiao *q; CelPixel *p;
     for(q = iniRegioes; q != NULL; q = q->proxRegiao){
-      n = (n+1)%NUM_CORES;
-      cor = cores[n];
+      colorir = (colorir+1)%NUM_CORES;
+      cor = cores[colorir];
       p = q->iniPixels;
       q->cor[0] = cor[0];
       q->cor[1] = cor[1];
@@ -402,8 +403,6 @@ repinteRegioes(Imagem *img, CelRegiao *iniRegioes, int col, int lin,
       repinteRegiao(img, r->iniPixels->col, r->iniPixels->lin, cor);
     }
   }
-  /*
-  AVISO(imagem: Vixe! Ainda nao fiz a funcao pinteRegioes.);*/
 }
 
 /*------------------------------------------------------------- 
@@ -440,7 +439,7 @@ pixelBorda(Imagem *img, int limiar, int col, int lin)
   /*proximos dois for's calculam gy*/
   for(k = 0; k < 4; k++){
     l = lin + 1;
-    c = col + xm[k];
+    c = col + v[k];
     if(l >= 0 && l < (*img).height && c >= 0 && c < (*img).width)  gy += luminosidadePixel(img, c, l);
   }
   for(k = 0; k < 4; k++){
@@ -683,6 +682,7 @@ segmenteImagem(Imagem *img, int limiar)
   celula da lista de pixels.
 
 */
+int xm[8] = {1, -1, 0, 0, 1, 1, -1, -1}, ym[8] = {0, 0, 1, -1, 1, -1, 1, -1};
 static int
 pixelsRegiao(Imagem *img, int limiar, int col, int lin, CelRegiao *regiao)
 {
