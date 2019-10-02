@@ -119,7 +119,6 @@ freeImagem(Imagem *img)
   (*img).height = 0;
   free(img);
   img = NULL;
-  /*AVISO(imagem: Vixe! Ainda nao fiz a funcao freeImagem.);*/
 }
 
 
@@ -154,8 +153,6 @@ freeRegioes(CelRegiao *iniRegioes)
     free(q);
     q = NULL;
   }
-  
-  /*AVISO(imagem: Vixe! Ainda nao fiz a funcao freeRegioes);*/
 }
 
 
@@ -187,7 +184,6 @@ copieImagem(Imagem *destino, Imagem *origem)
       destino->pixel[i][j] = origem->pixel[i][j];
     }
   }
-  /*AVISO(imagem: Vixe! Ainda nao fiz a funcao copieImagem.);*/
 }
 
 /*-------------------------------------------------------------
@@ -250,7 +246,6 @@ pinteImagem(Imagem *img, Byte cor[])
       setPixel(img, j, i, cor);
     }
   }
-  /*AVISO(imagem: Vixe! Ainda nao fiz a funcao pinteImagem.);*/
 }
 
 /*------------------------------------------------------------- 
@@ -327,7 +322,6 @@ pinteRegioes(Imagem *img, CelRegiao *iniRegioes, Bool borda)
       }
     }
   }
-  /*AVISO(imagem: Vixe! Ainda nao fiz a funcao pinteRegioes.);*/
 }
 
 /*-------------------------------------------------------------
@@ -360,8 +354,6 @@ repinteRegiao(Imagem *img, int col, int lin, Byte cor[])
   for(; p!= NULL; p = p->proxPixel){
     setPixel(img, p->col, p->lin, cor);
   }
-/*
-  AVISO(imagem: Vixe! Ainda nao fiz a funcao pinteRegiao.);*/
 }
 
 /*------------------------------------------------------------- 

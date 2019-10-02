@@ -72,8 +72,8 @@ main(int argc, char *argv[])
 
     /* 1. pegue da linha de comando o nome do arquivo com a imagem */
 
-    char * nome_arquivo;
-    nome_arquivo = argv[1];
+    /*char * nome_arquivo;
+    nome_arquivo = argv[1];*/
 
     /* 2. carregue de uma arquivo, no formato PPM, a imagem original */
 
@@ -128,7 +128,6 @@ quit(Imagem *tela, Imagem *img, CelRegiao *iniRegioes)
     freeImagem(tela);
     freeImagem(img);
     freeRegioes(iniRegioes);
-    /*AVISO(main.c: Vixe Ainda nao fiz a funcao quit.);*/
     exit(EXIT_SUCCESS); /* a execução do programa termina neste ponto */
 }
 
