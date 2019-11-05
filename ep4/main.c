@@ -103,7 +103,7 @@ main(int argc, char *argv[])
 	else 
 	{ /* opcao invalida */
 	    fprintf(stderr, "%s: opcao invalida '%s'\n", nomePrograma, argv[argc]); 
-	    mostreUso(nomePrograma); 
+	    mostreUso(nomePrograma);
 	}	
     }
 
@@ -134,7 +134,7 @@ main(int argc, char *argv[])
     /*------------------------------------------------------------*/
     /* 4 crie a tabela de simbolos                                */
     /* TAREFA EP4 */
-    /*initST();*/
+    initST();
 
     /*------------------------------------------------------------*/
     /* 5 interprete cada uma das linhas dadas */

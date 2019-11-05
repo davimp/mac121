@@ -211,10 +211,13 @@ showST()
     CelST * i;
     printf("   ==========================\n");
     printf("   Tabela de simbolos\n");
-    printf("'nome': valor\n");
-    printf(". . . . . . . . . . . . . .\n");
+    printf("   'nome': valor\n");
+    printf("   . . . . . . . . . . . . . .\n");
+    if(ini->proxVar == NULL){
+        printf("   tabela vazia\n");
+    }
     for(i = ini->proxVar; i != NULL; i=i->proxVar){
-        printf("'%s': %f\n", i->nomeVar, i->valorVar.vFloat);
+        printf("   '%s': %f\n", i->nomeVar, i->valorVar.vFloat);
     }
     printf("\n");
 

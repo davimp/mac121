@@ -67,7 +67,7 @@ infixaParaPosfixa(CelObjeto *iniInfixa)
     aux = p;
     stackInit();
     for(i = iniInfixa->prox; i != NULL; i = i->prox){
-      if(i->categoria <= 18){ /*se for operador*/
+      if(i->categoria <= 20){ /*se for operador*/
         if(stackEmpty()){
           stackPush((*i));
           /*se a pilha estiver vazia, empilha*/
@@ -76,13 +76,12 @@ infixaParaPosfixa(CelObjeto *iniInfixa)
           /*se nao estiver vazia, compara com a precedencia do que ta em cima*/
           /*se na pilha for menor, empilha*/
           valor = i->valor.vInt;
-          if(stackTop().valor.vInt < valor){
+          if(i->categoria == ABRE_PARENTESES || (i->categoria != FECHA_PARENTESES && stackTop().valor.vInt < valor)){
             stackPush(*i);
           }
           else{ /*se for maior ou igual, desempilha ate ...*/
-            while(!stackEmpty() && stackTop().valor.vInt >= valor){
-              if(stackTop().valor.vInt != valor || 
-              (i->categoria != OPER_LOGICO_NOT && i->categoria != OPER_EXPONENCIACAO && i->categoria != OPER_MENOS_UNARIO && i->categoria != OPER_ATRIBUICAO)){
+            if(i->categoria == FECHA_PARENTESES){
+              while(!stackEmpty() && stackTop().categoria != ABRE_PARENTESES){
                 auxiliar = stackPop();
                 aux->prox = mallocSafe(sizeof(CelObjeto *));
                 aux = aux->prox;
@@ -90,8 +89,22 @@ infixaParaPosfixa(CelObjeto *iniInfixa)
                 aux->valor = auxiliar.valor;
                 aux->prox = NULL;
               }
-              else{
-                  break;
+              if (!stackEmpty()) auxiliar = stackPop(); /*tira o abre parenteses*/
+            }
+            else{
+              while(!stackEmpty() && stackTop().valor.vInt >= valor){
+                if(stackTop().valor.vInt != valor || 
+                (i->categoria != OPER_LOGICO_NOT && i->categoria != OPER_EXPONENCIACAO && i->categoria != OPER_MENOS_UNARIO && i->categoria != OPER_ATRIBUICAO)){
+                  auxiliar = stackPop();
+                  aux->prox = mallocSafe(sizeof(CelObjeto *));
+                  aux = aux->prox;
+                  aux->categoria = auxiliar.categoria;
+                  aux->valor = auxiliar.valor;
+                  aux->prox = NULL;
+                }
+                else{
+                    break;
+                }
               }
             }
             stackPush((*i));

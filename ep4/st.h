@@ -42,7 +42,7 @@ getValorST(char *nomeVar);
 void  
 setValorST(char *nomeVar, CelObjeto *pValor);
 
-void  
+void
 showST(); 
 
 void  
