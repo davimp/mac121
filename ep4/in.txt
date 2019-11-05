@@ -21,3 +21,64 @@ not (2 < 3 and 3 < 4)
 1.1 != 1.1
 1.1 == 1.1
 2 != 2.1
+
+#---------------------------------------------- 
+# testes com variaveis 
+a = 4
+b = _3
+c = a + b
+a
+b
+c
+a < c
+a > c 
+a < c or a >= c      # sempre verdade
+not(a < c or a >= c) # sempre falso
+a = b = c = 5
+a
+b
+c
+d = (a + b) / c
+
+#----------------------------------------------
+# mais este com variaveis
+A = 2
+A 
+B = 3.1 + A
+B
+D = 2*A + B/2
+D
+C = D = A = B + A / 3.2 / A 
+A
+B
+C
+D
+A = B + (C = D + 1) # em Python nao existe esse tipo de atribuicao do C
+A
+B
+C
+D
+
+#------------------------------------------------
+# mais teste ainda
+A = 1
+A = (B = A + 1) * 3 ** not 2 ** 2  # Vixe! O que e isso?
+B
+A
+prova1 = 5.0
+prova2 = 6.2
+prova3 = 3.2
+mp = (prova1 + 2*prova2 + 2*prova3) / 5
+mp
+mep = 4.0
+mep
+mp >= 5 
+mep >= 5
+aprovado = mp >= 5 and mep >= 5
+aprovado
+var1 = (var2 = (var3 = (var4 = (var5 = 0) + 1) + 1) + 1) + 1 # :-)
+var1
+var2
+var3
+var4
+var5

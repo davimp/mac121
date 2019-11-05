@@ -190,7 +190,10 @@ freeListaObjetos(CelObjeto *iniLista)
 void
 mostreValor(CelObjeto *pValor)
 {
-    printf("%f\n", pValor->valor.vFloat);
+    if(pValor->categoria == FLOAT)
+        printf("%f\n", pValor->valor.vFloat);
+    else if(pValor->categoria == ID)
+        printf("%s\n", pValor->valor.pStr);
 }
 
 /*-------------------------------------------------------------

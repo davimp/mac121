@@ -14,7 +14,7 @@
 
   eval.c
   Pitao II
-s
+
   Referências: Com exceção das rotinas fornecidas no esqueleto e em sala
   de aula, caso você tenha utilizado alguma refência, liste-as abaixo
   para que o seu programa não seja considerada plágio.
@@ -93,7 +93,7 @@ static const int precedencia[MAX_OPERADORES] =
 
     /* atribuicao */ 
     ,1  /* "=" */ /* da direita para a esquerda EP4 */ 
-}; 
+};
 
 /*-------------------------------------------------------------
  *  itensParaValores
@@ -166,7 +166,6 @@ itensParaValores(CelObjeto *iniFilaItens)
 {
     CelObjeto *i;
     double aux;
-
     for(i = iniFilaItens->prox; i != NULL; i = i->prox){
         /*verifica se contem string, pois, nesse caso, devemos dar free*/
         if(i->categoria == FLOAT_STR || i->categoria == INT_STR || i->categoria == BOOL_STR){
@@ -225,9 +224,11 @@ CelObjeto *
 eval (CelObjeto *iniPosfixa, Bool mostrePilhaExecucao)
 {
     CelObjeto* i; /* ponteiro para percorrer a lista*/
-    CelObjeto* atr;
-    CelObjeto a, b; /* variaveis para pegar os operandos*/
-    CelObjeto auxiliar;
+    CelObjeto* a;
+    CelObjeto* b; /* variaveis para pegar os operandos*/
+    CelObjeto* auxiliar;
+    char * nome;
+    double aa, bb;
     double resultado = 0.; /* varaivel para guardar o resultado de cada operacao*/
     int divisao; /* variavel para auxiliar na divisao inteira*/ 
     stackInit(); /* inicializacao da pilha */
@@ -251,74 +252,91 @@ eval (CelObjeto *iniPosfixa, Bool mostrePilhaExecucao)
                 stackFree();
                 return NULL;
             }
+
+            if(a->categoria == ID){
+                nome = a->valor.pStr;
+                free(a);
+                a = getValorST(nome);
+            }
+            if(b->categoria == ID){
+                nome = b->valor.pStr;
+                free(b);
+                b = getValorST(nome);
+            }
+
+            aa = a->valor.vFloat;
+            bb = b->valor.vFloat;
+            free(a);
+            free(b);
+
             switch (i->categoria)
             {
             case OPER_IGUAL:    
-                if(a.valor.vFloat == b.valor.vFloat)
+                if(aa == bb)
                     resultado = TRUE;
                 else 
                     resultado = FALSE;
                 break;
             case OPER_DIFERENTE:
-                if(a.valor.vFloat != b.valor.vFloat)
+                if(aa != bb)
                     resultado = TRUE;
                 else
                     resultado = FALSE;
                 break;
             case OPER_MAIOR_IGUAL:
-                if(a.valor.vFloat >= b.valor.vFloat)
+                if(aa >= bb)
                     resultado = TRUE;
                 else
                     resultado = FALSE;
                 break;
             case OPER_MENOR_IGUAL:
-                if(a.valor.vFloat <= b.valor.vFloat)
+                if(aa <= bb)
                     resultado = TRUE;
                 else
                     resultado = FALSE;
                 break;
             case OPER_EXPONENCIACAO:
-                resultado = pow(a.valor.vFloat, b.valor.vFloat);
+                resultado = pow(aa, bb);
                 break;
             case OPER_DIVISAO_INT:
-                divisao = a.valor.vFloat/b.valor.vFloat;
+                divisao = aa/bb;
                 resultado = divisao;
                 break;
             case OPER_MAIOR:
-                if(a.valor.vFloat > b.valor.vFloat)
+                if(aa > bb)
                     resultado = TRUE;
                 else
                     resultado = FALSE;
                 break;
             case OPER_MENOR:
-                if(a.valor.vFloat < b.valor.vFloat)
+                if(aa < bb)
                     resultado = TRUE;
                 else
                     resultado = FALSE;
                 break;
             case OPER_RESTO_DIVISAO:
-                resultado = fmod(a.valor.vFloat, b.valor.vFloat);
+                resultado = fmod(aa, bb);
                 break;
             case OPER_MULTIPLICACAO:
-                resultado = (a.valor.vFloat)*(b.valor.vFloat);
+                resultado = (aa)*(bb);
                 break;
             case OPER_DIVISAO:
-                resultado = (a.valor.vFloat)/(b.valor.vFloat);
+                resultado = (aa)/(bb);
                 break;
             case OPER_ADICAO:
-                resultado = (a.valor.vFloat)+(b.valor.vFloat);
+                resultado = (aa)+(bb);
                 break;
             case OPER_SUBTRACAO:
-                resultado = (a.valor.vFloat)-(b.valor.vFloat);
+                resultado = (aa)-(bb);
                 break;
             case OPER_LOGICO_AND:
-                if((a.valor.vFloat) && (b.valor.vFloat))
+                if((aa) && (bb))
                     resultado = TRUE;
                 else
                     resultado = FALSE;
                 break;
             case OPER_LOGICO_OR:
-                if(a.valor.vFloat || b.valor.vFloat)
+                if(aa || bb)
                     resultado = TRUE;
                 else
                     resultado = FALSE;
@@ -326,8 +344,9 @@ eval (CelObjeto *iniPosfixa, Bool mostrePilhaExecucao)
             default:
                 break;
             }
-            auxiliar.valor.vFloat = resultado;
-            auxiliar.categoria = FLOAT;
+            auxiliar = mallocSafe(sizeof(CelObjeto));
+            auxiliar->valor.vFloat = resultado;
+            auxiliar->categoria = FLOAT;
             stackPush(auxiliar);
         }
         /* os proximos dois else if sao para as duas operacoes unarias */
@@ -335,14 +354,24 @@ eval (CelObjeto *iniPosfixa, Bool mostrePilhaExecucao)
             if(!stackEmpty()){
                 a = stackPop();
             }
-            else{
+            else {
                 AVISO(stackPop em stack.c: pilha vazia...);
                 ERRO(eval em eval.c: abortando o calculo da expressao);
                 stackFree();
                 return NULL;
             }
-            auxiliar.categoria = FLOAT;
-            auxiliar.valor.vFloat = !(a.valor.vFloat);
+
+            if(a->categoria == ID){
+                nome = a->nomeID;
+                free(a);
+                a = getValorST(a->nomeID);
+            }
+            aa = a->valor.vFloat;
+            free(a);
+
+            auxiliar = mallocSafe(sizeof(CelObjeto));
+            auxiliar->categoria = FLOAT;
+            auxiliar->valor.vFloat = !(aa);
             stackPush(auxiliar);
         }
         else if(i->categoria == OPER_MENOS_UNARIO){
@@ -355,8 +384,18 @@ eval (CelObjeto *iniPosfixa, Bool mostrePilhaExecucao)
                 stackFree();
                 return NULL;
             }
-            auxiliar.categoria = FLOAT;
-            auxiliar.valor.vFloat = -(a.valor.vFloat);
+
+            if(a->categoria == ID){
+                nome = a->valor.pStr;
+                free(a);
+                a = getValorST(a->nomeID);
+            }
+            aa = a->valor.vFloat;
+            free(a);
+
+            auxiliar = mallocSafe(sizeof(CelObjeto));
+            auxiliar->categoria = FLOAT;
+            auxiliar->valor.vFloat = -(aa);
             stackPush(auxiliar);
         }
         else if(i->categoria == OPER_ATRIBUICAO){
@@ -368,7 +407,6 @@ eval (CelObjeto *iniPosfixa, Bool mostrePilhaExecucao)
                 stackFree();
                 return NULL;
             }
-            
             if(!stackEmpty())
                 a = stackPop();
             else{
@@ -377,25 +415,29 @@ eval (CelObjeto *iniPosfixa, Bool mostrePilhaExecucao)
                 stackFree();
                 return NULL;
             }
-            atr = mallocSafe(sizeof(CelObjeto *));
-            atr->valor = b.valor;
-            atr->categoria = b.categoria;
-            setValorST(a.valor.pStr, atr);
-            free(atr);
 
-            auxiliar.categoria = FLOAT;
-            auxiliar.valor.vFloat =  b.valor.vFloat;
+            if(b->categoria == ID){
+                nome = b->valor.pStr;
+                free(b);
+                b = getValorST(b->valor.pStr);
+            }
 
-            stackPush(auxiliar);
+            setValorST(a->nomeID, b);
+            free(b);
+
+            stackPush(a);
         }
         else if(i->categoria == ID){
-            auxiliar = *getValorST(i->valor.pStr);
+            auxiliar = mallocSafe(sizeof(CelObjeto));
+            auxiliar->categoria = ID;
+            auxiliar->valor.pStr = i->valor.pStr;
             stackPush(auxiliar);
         }
         /* se for um operando */
         else if(i->categoria == FLOAT){
-            auxiliar.categoria = FLOAT;
-            auxiliar.valor.vFloat = i->valor.vFloat;
+            auxiliar = mallocSafe(sizeof(CelObjeto));
+            auxiliar->categoria = FLOAT;
+            auxiliar->valor.vFloat = i->valor.vFloat;
             stackPush(auxiliar);
         }
         /* se for para mostra a pilha de execucao */
@@ -409,11 +451,13 @@ eval (CelObjeto *iniPosfixa, Bool mostrePilhaExecucao)
         return NULL;
     }
     i = NULL;
-    i = mallocSafe(sizeof(CelObjeto*));
-    auxiliar = stackPop();
-    i->categoria = auxiliar.categoria;
-    i->valor.vFloat = auxiliar.valor.vFloat;
+    i = stackPop();
     i->prox = NULL;
+    if(i->categoria == ID){
+        nome = i->nomeID;
+        free(nome);
+        i = getValorST(i->nomeID);
+    }
     stackFree();
     return i;
 }

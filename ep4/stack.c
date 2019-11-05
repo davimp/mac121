@@ -52,7 +52,7 @@
 
 void stackInit()
 {
-  s = mallocSafe(sizeof(StackNode*));
+  s = mallocSafe(sizeof(StackNode));
   /* Cabeça, nao contem valor*/
   s->prox = NULL;
 }
@@ -64,28 +64,21 @@ int stackEmpty()
 
 void stackPush(Item item)
 {
-  StackNode* nova = mallocSafe(sizeof(StackNode*));
-
-  nova->categoria = item.categoria;
-  nova->valor = item.valor;
-  nova->prox = s->prox;
-  s->prox = nova;
+  item->prox = s->prox;
+  s->prox = item;
 }
 
 Item stackPop()
 {
   Item item;
-  StackNode* p;
-  item = (*(s->prox));
-  p = s->prox;
-  s->prox = p->prox;
-  free(p);
+  item = s->prox;
+  s->prox = item->prox;
   return item;
 }
 
 Item stackTop()
 {
-  return *(s->prox);
+  return s->prox;
 }
 
 void stackFree()
@@ -102,13 +95,12 @@ void stackFree()
 
 void stackPrint(){
   StackNode* i;
-  printf("==========================");
+  printf("==========================\n");
   printf("   Pilha de execucao\n");
   printf("   valor\n");
   printf(". . . . . . . . . . . . . . .\n");
   for(i = s->prox; i != NULL; i = i->prox){
-    if(i->categoria == FLOAT)
-      printf("   %f\n", i->valor.vFloat);
+    mostreValor(i);
   }
   printf("\n\n");
 }

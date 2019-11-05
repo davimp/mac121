@@ -63,7 +63,7 @@ endVarST(char *nomeVar);
 void
 initST()
 {
-    ini = mallocSafe(sizeof(CelST*));
+    ini = mallocSafe(sizeof(CelST));
     ini->nomeVar = NULL;
     ini->tipoVar = FLOAT;
     ini->valorVar.vFloat = 42;
@@ -90,20 +90,13 @@ initST()
 CelObjeto *
 getValorST(char *nomeVar)
 {
-    /* O objetivo do return a seguir e evitar que 
-       ocorra erro de sintaxe durante a fase de desenvolvimento 
-       do EP. Esse return devera ser removido depois que
-       a funcao estiver pronta.
-    */
-    /*AVISO(st.c: Vixe! Ainda nao fiz a funcao getValorST.);
-    return NULL;*/
     CelObjeto * auxiliar;
     CelST * i;
     auxiliar = NULL;
     i = endVarST(nomeVar);
 
     if(i != NULL){
-        auxiliar = mallocSafe(sizeof(CelObjeto *));
+        auxiliar = mallocSafe(sizeof(CelObjeto));
         auxiliar->categoria = FLOAT;
         auxiliar->prox = NULL;
         auxiliar->valor.vFloat = i->valorVar.vFloat;
@@ -156,7 +149,7 @@ setValorST(char *nomeVar, CelObjeto *pValor)
     CelST *i;
     i = endVarST(nomeVar);
     if(i == NULL){
-        i = mallocSafe(sizeof(CelST *));
+        i = mallocSafe(sizeof(CelST));
         i->proxVar =  ini->proxVar;
         ini->proxVar = i;
         i->nomeVar = mallocSafe(sizeof(char)*(strlen(nomeVar) + 1));
@@ -181,6 +174,8 @@ freeST()
     while(ini->proxVar != NULL){
         p = ini->proxVar;
         ini->proxVar = p->proxVar;
+        if(p->nomeVar != NULL)
+            free(p->nomeVar);
         free(p);
     }
     free(ini);
@@ -237,13 +232,6 @@ showST()
 static CelST *
 endVarST(char *nomeVar)
 {
-    /* O objetivo do return a seguir e evitar que 
-       ocorra erro de sintaxe durante a fase de desenvolvimento 
-       do EP. Esse return devera ser removido depois que
-       a funcao estiver pronta.
-    */
-    /*AVISO(st.c: Vixe! Ainda nao fiz a funcao endVarST.);
-    return NULL;*/
     CelST * i;
     for(i = ini->proxVar; i != NULL; i = i->proxVar){
         if(!strcmp(i->nomeVar, nomeVar)){

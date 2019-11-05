@@ -56,14 +56,14 @@
 #endif /* _STACK_H */
 
 
-typedef CelObjeto Item;
+typedef CelObjeto* Item;
 
 /* cada celula da stack e'um CelObjeto*/
 typedef CelObjeto StackNode;
 
 StackNode* s; /*inicio da pilha*/
 
-/* inicializa a stack */
+/* inicializa a stack */  
 void stackInit();
 
 /* devolve se a pilha esta vazia(1) ou nao(0)*/
