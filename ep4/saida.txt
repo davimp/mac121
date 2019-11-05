@@ -1,0 +1,70 @@
+MAC0121 2019 - EP4
+Pitao (Oct 25 2019, 13:18:57)
+[GCC 8.3.0] on linux
+Linha 0: #---------------------------------------------- 
+
+Linha 1: # teste com constantes
+
+Linha 2: _1          # menos unario
+-1
+
+Linha 3: 2 + 5 * 3
+17
+
+Linha 4: (2 + 5)*3
+21
+
+Linha 5: 2 - _5      # == 2 + 5  
+7
+
+Linha 6: 2 ** 2 ** 3 # == 256, precedencia e da direira para a esquerda
+256
+
+Linha 7: (2 **2)** 3 # ==64 
+64
+
+Linha 8: 2.2 * 3
+6.600000000000001
+
+Linha 9: 7 / 2.3
+3.043478260869565
+
+Linha 10: 7 % 2.3
+0.1000000000000005
+
+Linha 11: 7 // 2.3
+3.0
+
+Linha 12: 17 // 3
+5
+
+Linha 13: 1 < 2
+True
+
+Linha 14: 1 > 2
+False
+
+Linha 15: 2 <= 2
+True
+
+Linha 16: 2 >= 2
+True
+
+Linha 17: 2 < 3 and 3 < 4
+True
+
+Linha 18: not (2 < 3 and 3 < 4)
+False
+
+Linha 19: 2 < 3 or  4 > 3
+True
+
+Linha 20: 1.1 != 1.1
+False
+
+Linha 21: 1.1 == 1.1
+True
+
+Linha 22: 2 != 2.1
+True
+

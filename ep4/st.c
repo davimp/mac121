@@ -47,7 +47,6 @@
 /* ponteiro para a celula cabeca da lista que representa a tabela
    de simbolos */
 static CelST *ini; 
-
 /* funcao auxiliar */
 static CelST *
 endVarST(char *nomeVar);
@@ -64,7 +63,10 @@ endVarST(char *nomeVar);
 void
 initST()
 {
-    ini = mallocSafe(sizeof(CelST *));
+    ini = mallocSafe(sizeof(CelST*));
+    ini->nomeVar = NULL;
+    ini->tipoVar = FLOAT;
+    ini->valorVar.vFloat = 42;
     ini->proxVar = NULL;
 }
 
@@ -153,7 +155,7 @@ setValorST(char *nomeVar, CelObjeto *pValor)
 {
     CelST *i;
     i = endVarST(nomeVar);
-    if(!i){
+    if(i == NULL){
         i = mallocSafe(sizeof(CelST *));
         i->proxVar =  ini->proxVar;
         ini->proxVar = i;
@@ -175,15 +177,13 @@ setValorST(char *nomeVar, CelObjeto *pValor)
 void 
 freeST()
 {
-    CelST * i;
     CelST * p;
-    i = ini;
-    while(i->proxVar != NULL){
-        p = i->proxVar;
-        i->proxVar = p->proxVar;
+    while(ini->proxVar != NULL){
+        p = ini->proxVar;
+        ini->proxVar = p->proxVar;
         free(p);
     }
-    free(i);
+    free(ini);
 }
 
 /*-------------------------------------------------------------

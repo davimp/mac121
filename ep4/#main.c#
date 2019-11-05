@@ -93,8 +93,8 @@ main(int argc, char *argv[])
 	else if (!strncmp(argv[argc], "-l", 2)) mostreItensLexicos  = TRUE;
 	else if (!strncmp(argv[argc], "-v", 2)) mostreValores       = TRUE;
 	else if (!strncmp(argv[argc], "-p", 2)) mostrePilhaExecucao = TRUE;
-	else if (!strncmp(argv[argc], "-e", 2)) mostrePosfixa       = TRUE;
-	else if (!strncmp(argv[argc], "-t", 2)) mostreTabela        = TRUE;
+	else if (!strncmp(argv[argc], "-e", 2)) mostrePosfixa        = TRUE;
+	else if (!strncmp(argv[argc], "-t", 2)) mostreTabela         = TRUE;
 	else if (!strncmp(argv[argc], "-s", 2))
 	{  /* teremos um arquivo com as instrucoes */
 	    modoInterativo = FALSE;
@@ -134,7 +134,7 @@ main(int argc, char *argv[])
     /*------------------------------------------------------------*/
     /* 4 crie a tabela de simbolos                                */
     /* TAREFA EP4 */
-    initST();
+    /*initST();*//*esta dando problema, n sei pq*/
 
     /*------------------------------------------------------------*/
     /* 5 interprete cada uma das linhas dadas */
