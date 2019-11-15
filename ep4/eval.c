@@ -254,12 +254,12 @@ eval (CelObjeto *iniPosfixa, Bool mostrePilhaExecucao)
             }
 
             if(a->categoria == ID){
-                nome = a->valor.pStr;
+                nome =  a->valor.pStr;
                 free(a);
                 a = getValorST(nome);
             }
             if(b->categoria == ID){
-                nome = b->valor.pStr;
+                nome =  b->valor.pStr;
                 free(b);
                 b = getValorST(nome);
             }
@@ -362,7 +362,7 @@ eval (CelObjeto *iniPosfixa, Bool mostrePilhaExecucao)
             }
 
             if(a->categoria == ID){
-                nome = a->nomeID;
+                nome = a->valor.pStr;
                 free(a);
                 a = getValorST(a->nomeID);
             }
@@ -417,7 +417,7 @@ eval (CelObjeto *iniPosfixa, Bool mostrePilhaExecucao)
             }
 
             if(b->categoria == ID){
-                nome = b->valor.pStr;
+                nome =  b->valor.pStr;
                 free(b);
                 b = getValorST(b->valor.pStr);
             }
@@ -455,8 +455,8 @@ eval (CelObjeto *iniPosfixa, Bool mostrePilhaExecucao)
     i->prox = NULL;
     if(i->categoria == ID){
         nome = i->nomeID;
-        free(nome);
-        i = getValorST(i->nomeID);
+        free(i);
+        i = getValorST(nome);
     }
     stackFree();
     return i;
