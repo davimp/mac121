@@ -10,8 +10,8 @@
   SUA DISTRIBUIÇÃO. ESTOU CIENTE QUE OS CASOS DE PLÁGIO SÃO PUNIDOS COM 
   REPROVAÇÃO DIRETA NA DISCIPLINA.
 
-  Nome:
-  NUSP:
+  Nome: Davi de Menezes Pereira
+  NUSP: 11221988
 
   IMDB: util.c
 
@@ -61,6 +61,19 @@ Bool
 achePalavra(unsigned char *pal, int tPal, unsigned char *texto, int tTex)
 {
     AVISO(achePalavra em util.c: Vixe! Ainda nao fiz essa funcao...);
+    int ult[256];
+    int i, r, k, ocorre;
+    for(i = 0; i < 256; i++) ult[i] = 0;
+    for(i = 1; i <= tPal; i++) ult[pal[i]] = i;
+
+    ocorre = 0; k = tPal;
+    while(k <= tTex){
+        r = 0;
+        while(r < tPal && (tolower(pal[tPal-r]) - tolower(texto[k-r]) == 0)) r++;
+        if(r == tPal) return TRUE;
+        if(k == tTex) k++;
+        else k += tPal - ult[texto[k+1]] + 1; 
+    }
     return FALSE;
 }
 

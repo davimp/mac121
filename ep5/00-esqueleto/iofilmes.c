@@ -55,7 +55,7 @@ static void  erroLeitura(char *msg, char *lin);
   Faz a leitura da entrada padrao do nome um um arquivo que contem
   dados sobre filmes. Os dados devem estar no formato 
   utilizado pelo IMDB. Esses dados sao lidos e para cada filme
-  e criada uma estrutura Filme. Ess essa estrutura e inserida na 
+  e' criada uma estrutura Filme. Essa essa estrutura e' inserida na 
   lista de filmes representada pelo parametro lst.
 
   Author: Carlos Hitoshi Morimoto
@@ -399,6 +399,12 @@ void
 mostreListaFilmes(ListaFilmes *lst)
 {
     AVISO(mostreListaFilmes:  Vixe ainda nao fiz essa funcao...);
+    Filme *i;
+    i = lst->cab->prox;
+    while(i != lst->cab)
+    {
+        mostreFilme(i);
+    }
 }
 
 /*----------------------------------------------------------------------
@@ -421,6 +427,18 @@ void
 mostreMelhoresFilmes(ListaFilmes *lst)
 {
     AVISO(mostreMelhores:  Vixe ainda nao fiz essa funcao...);
+    int n, x, v, c;
+    Filme *i;
+    c = scanf("%d %d %d", &n, &x, &v);
+    i = lst->cab->prox;
+    while(n){
+        if(i->nota <= x && i->votos >= v)
+        {
+            mostreFilme(i);
+            n--;
+        }
+        i = i->prox;
+    }
 }
 
 /*----------------------------------------------------------------------
@@ -443,4 +461,16 @@ void
 mostrePioresFilmes(ListaFilmes *lst)
 {
     AVISO(mostrePiores:  Vixe ainda nao fiz essa funcao...);
+    int n, x, v, c;
+    Filme *i;
+    c = scanf("%d %d %d", &n, &x, &v);
+    i = lst->cab->ant;
+    while(n){
+        if(i->nota >= x && i->votos >= v)
+        {
+            mostreFilme(i);
+            n--;
+        }
+        i = i->ant;
+    }
 }
