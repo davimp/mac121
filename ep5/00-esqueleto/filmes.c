@@ -115,13 +115,16 @@ libereListaFilmes(ListaFilmes *lst)
     AVISO(libereListaFilmes em filmes.c: Vixe! Ainda nao fiz essa funcao...);
     Filme *anterior, *proximo;
     Filme *i;
-    i = lst->cab;
-    while(i !=NULL)
+    if(lst->cab->prox != NULL) i = lst->cab->prox;
+    else i = lst->cab;
+    while(i != lst->cab)
     {
         proximo = i->prox;
         i->prox = proximo->prox;
         libereFilme(proximo);
     }
+    free(lst->cab);
+    free(lst);
 }
 
 /*----------------------------------------------------------------------
@@ -153,13 +156,10 @@ void
 insiraFilme(ListaFilmes *lst, Filme *flm)
 {
     AVISO(insiraFilme em filmes.c: Vixe! Ainda nao fiz essa funcao...);
-    Filme *i;
-    i = lst->cab->prox;
-    while(i->prox != NULL)
-        i = i->prox;
-    i->prox = flm;
-    flm->ant = i;
-    flm->prox = NULL;
+    flm->prox = lst->cab->prox;
+    flm->ant = lst->cab;
+    lst->cab->prox->ant = flm;
+    lst->cab->prox = flm;
 }
 
 
@@ -189,10 +189,12 @@ contemFilme(ListaFilmes *lst, Filme *flm)
 {
     AVISO(contemFilme em filme.c: Vixe! Ainda nao fiz essa funcao...);
     Filme *i;
-    i = lst->cab->prox;
-    while(i != NULL)
+    if(lst->cab->prox != NULL) i = lst->cab->prox;
+    else i = lst->cab;
+    while(i != lst->cab)
     {
         if(i->nome == flm->nome && i->nota == flm->nota && i->ano == flm->ano) return TRUE;
+        i = i->prox;
     }
     return FALSE;
 }
