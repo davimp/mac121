@@ -398,12 +398,12 @@ mostreFilme(Filme *flm)
 void 
 mostreListaFilmes(ListaFilmes *lst)
 {
-    AVISO(mostreListaFilmes:  Vixe ainda nao fiz essa funcao...);
     Filme *i;
     i = lst->cab->prox;
     while(i != lst->cab)
     {
         mostreFilme(i);
+        i = i->prox;
     }
 }
 
@@ -431,7 +431,7 @@ mostreMelhoresFilmes(ListaFilmes *lst)
     Filme *i;
     c = scanf("%d %d %d", &n, &x, &v);
     i = lst->cab->prox;
-    while(n){
+    while(n && i != lst->cab){
         if(i->nota <= x && i->votos >= v)
         {
             mostreFilme(i);
@@ -465,7 +465,7 @@ mostrePioresFilmes(ListaFilmes *lst)
     Filme *i;
     c = scanf("%d %d %d", &n, &x, &v);
     i = lst->cab->ant;
-    while(n){
+    while(n && i != lst->cab){
         if(i->nota >= x && i->votos >= v)
         {
             mostreFilme(i);

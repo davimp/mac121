@@ -88,15 +88,14 @@ crieFilme (char dist[], int votos, float nota, char *nome, int ano)
 ListaFilmes *
 crieListaFilmes()
 {
-    AVISO(crieListaFilmes em filmes.c: Vixe! Ainda nao fiz essa funcao ...);
     ListaFilmes * l;
     Filme * cabeca;
     l = mallocSafe(sizeof(ListaFilmes));
     cabeca = mallocSafe(sizeof(Filme));
     l->cab = cabeca;
     l->nFilmes = 0;
-    cabeca->prox = NULL;
-    cabeca->ant = NULL;
+    cabeca->prox = cabeca;
+    cabeca->ant = cabeca;
     return l;
 }
 
@@ -112,19 +111,16 @@ crieListaFilmes()
 void
 libereListaFilmes(ListaFilmes *lst)
 {
-    AVISO(libereListaFilmes em filmes.c: Vixe! Ainda nao fiz essa funcao...);
-    Filme *anterior, *proximo;
+    Filme *proximo;
     Filme *i;
-    if(lst->cab->prox != NULL) i = lst->cab->prox;
-    else i = lst->cab;
-    while(i != lst->cab)
+    i = lst->cab->prox;
+    while(i != lst->cab->prox)
     {
         proximo = i->prox;
         i->prox = proximo->prox;
         libereFilme(proximo);
+        i = i->prox;
     }
-    free(lst->cab);
-    free(lst);
 }
 
 /*----------------------------------------------------------------------
@@ -137,7 +133,6 @@ libereListaFilmes(ListaFilmes *lst)
 void 
 libereFilme(Filme *flm)
 {
-    AVISO(libereFilme em filmes.c: Vixe! Ainda nao fiz essa funcao...);
     if(flm->nome != NULL) free(flm->nome);
     free(flm);
 }
@@ -155,7 +150,6 @@ libereFilme(Filme *flm)
 void 
 insiraFilme(ListaFilmes *lst, Filme *flm)
 {
-    AVISO(insiraFilme em filmes.c: Vixe! Ainda nao fiz essa funcao...);
     flm->prox = lst->cab->prox;
     flm->ant = lst->cab;
     lst->cab->prox->ant = flm;
@@ -187,7 +181,6 @@ insiraFilme(ListaFilmes *lst, Filme *flm)
 Bool 
 contemFilme(ListaFilmes *lst, Filme *flm)
 {
-    AVISO(contemFilme em filme.c: Vixe! Ainda nao fiz essa funcao...);
     Filme *i;
     if(lst->cab->prox != NULL) i = lst->cab->prox;
     else i = lst->cab;
@@ -210,15 +203,14 @@ contemFilme(ListaFilmes *lst, Filme *flm)
 void 
 removaFilme(ListaFilmes *lst, Filme *flm)
 {
-    AVISO(removaFilme em filmes.c: Vixe! Ainda nao fiz essa funcao...);
     Filme *i;
     Filme *anterior, *proximo;
     i = lst->cab->prox;
     while(!strcmp(i->nome, flm->nome)) i = i->prox;
     anterior = i->ant;
     proximo = i->prox;
-    if(anterior != NULL) anterior->prox = proximo;
-    if(proximo != NULL) proximo->ant = anterior;
+    anterior->prox = proximo;
+    proximo->ant = anterior;
     libereFilme(i);
 }
 
@@ -258,6 +250,7 @@ void
 mergeSortFilmes(ListaFilmes *lst, Criterio criterio)
 {
     AVISO(mergeSortFilmes em filmes.c:  Vixe ainda nao fiz essa funcao...);
+    
 }
 
 /*----------------------------------------------------------------------

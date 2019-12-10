@@ -60,16 +60,15 @@
 Bool
 achePalavra(unsigned char *pal, int tPal, unsigned char *texto, int tTex)
 {
-    AVISO(achePalavra em util.c: Vixe! Ainda nao fiz essa funcao...);
     int ult[256];
-    int i, r, k, ocorre;
+    int i, r, k;
     for(i = 0; i < 256; i++) ult[i] = 0;
-    for(i = 1; i <= tPal; i++) ult[pal[i]] = i;
+    for(i = 0; i < tPal; i++) ult[pal[i]] = i+1;
 
-    ocorre = 0; k = tPal;
+    k = tPal;
     while(k <= tTex){
         r = 0;
-        while(r < tPal && (tolower(pal[tPal-r]) - tolower(texto[k-r]) == 0)) r++;
+        while(r < tPal && (pal[tPal-r-1] - texto[k-r] == 0)) r++;
         if(r == tPal) return TRUE;
         if(k == tTex) k++;
         else k += tPal - ult[texto[k+1]] + 1; 

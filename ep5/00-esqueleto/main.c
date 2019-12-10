@@ -28,7 +28,7 @@
 
 #include <stdio.h>  /* printf(), scanf() */ 
 #include <time.h>   /* CLOCKS_PER_SECOND */
-
+#include <string.h>
 #include "main.h"
 
 #include "filmes.h"   /* crieListaFilmes(), crieFilme(), 
@@ -53,6 +53,9 @@ static char  leiaOpcao();
 int 
 main(int argc, char *argv[])
 {
+    char *palavra;
+    unsigned char *upalavra, *unome;
+    Filme *i, *j;
     ListaFilmes *lst = crieListaFilmes(); 
     char         opcao;
     clock_t start, end; /* usadas para medir tempo de processamento */
@@ -156,6 +159,8 @@ main(int argc, char *argv[])
    
             flm = crieFilme(dist, votos, nota, nome, ano);
             mostreFilme(flm);
+
+            insiraFilme(lst, flm);
             
             /* completar essa opcao */
             break;
@@ -163,7 +168,18 @@ main(int argc, char *argv[])
 
         /*---------------------------------------------*/
         case REMOVER:
-        {
+        {/*
+            printf("Digite parte do nome do filme a ser procurado: ");
+            scanf("%s", palavra);
+            memcpy(upalavra, palavra, strlen(palavra) + 1);
+            i = lst->cab->prox;
+            while(i != lst->cab)
+            {
+                memcpy(unome, i->nome, strlen(i->nome) + 1);
+                if(achePalavra(upalavra, strlen(palavra), unome, strlen(i->nome))) break;
+                i = i->prox;
+            }
+            removaFilme(lst, i);*/
             break;
         }
 
@@ -194,6 +210,7 @@ main(int argc, char *argv[])
         /*---------------------------------------------*/
         case MOSTRAR:
         {
+            mostreListaFilmes(lst);
             break;
         }
 
@@ -212,6 +229,13 @@ main(int argc, char *argv[])
         /*---------------------------------------------*/
         case LIMPAR:
         {
+            i = lst->cab->prox;
+            while(i->prox != lst->cab)
+            {
+                j = i->prox;
+                i->prox = j->prox;
+                libereFilme(j);
+            }
             break;
         }
 
