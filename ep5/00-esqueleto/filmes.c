@@ -154,6 +154,7 @@ insiraFilme(ListaFilmes *lst, Filme *flm)
     flm->ant = lst->cab;
     lst->cab->prox->ant = flm;
     lst->cab->prox = flm;
+    (lst->nFilmes)++;
 }
 
 
@@ -212,6 +213,7 @@ removaFilme(ListaFilmes *lst, Filme *flm)
     anterior->prox = proximo;
     proximo->ant = anterior;
     libereFilme(i);
+    (lst->nFilmes)--;
 }
 
 /*----------------------------------------------------------------------
@@ -250,6 +252,19 @@ void
 mergeSortFilmes(ListaFilmes *lst, Criterio criterio)
 {
     AVISO(mergeSortFilmes em filmes.c:  Vixe ainda nao fiz essa funcao...);
+    ListaFilmes *q;
+    Filme *i;
+    int cont = 0;
+    if(lst->nFilmes <= 1) return;
+    q->cab = mallocSafe(sizeof(ListaFilmes));
+    i = lst->cab->prox;
+    for(cont = 1; cont <= (lst->nFilmes)/2; cont++) i = i->prox;
+    q->cab->prox = i;
+    q->nFilmes = (2*(lst->nFilmes)-1)/2;
+    lst->nFilmes = (lst->nFilmes)/2;
+    mergeSortFilmes(lst, criterio);
+    mergeSortFilmes(q, criterio);
+    /* intercala */
     
 }
 

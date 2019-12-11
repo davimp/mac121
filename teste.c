@@ -22,11 +22,15 @@ achePalavra(unsigned char *pal, int tPal, unsigned char *texto, int tTex)
 
 int main()
 {
-    unsigned char *text;
-    unsigned char *p;
-    p = "ads";
-    text = "abofwen qads jn ndkjnarsas dasin ada die ";
-    printf("resposta: %d\n", achePalavra(p, 3, text, 41)/*p[1]*/);
+    char *text;
+    char *p;
+    int a, b;
+    a = 0;
+    scanf("%s", &p);
+    scanf("%s", &text);
+    for(b = 0; p[b] != '\0'; b++);
+    printf("%d\n", b);
+    /*printf("resposta: %d\n", achePalavra(p, strlen(p), text, strlen(text)));*/
     return 0;
 
 }

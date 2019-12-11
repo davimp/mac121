@@ -168,18 +168,17 @@ main(int argc, char *argv[])
 
         /*---------------------------------------------*/
         case REMOVER:
-        {/*
+        {
             printf("Digite parte do nome do filme a ser procurado: ");
-            scanf("%s", palavra);
-            memcpy(upalavra, palavra, strlen(palavra) + 1);
+            leiaString(palavra, 4);
             i = lst->cab->prox;
+
             while(i != lst->cab)
             {
-                memcpy(unome, i->nome, strlen(i->nome) + 1);
-                if(achePalavra(upalavra, strlen(palavra), unome, strlen(i->nome))) break;
+                if(achePalavra(palavra, 4, i->nome, strlen(i->nome))) break;
                 i = i->prox;
             }
-            removaFilme(lst, i);*/
+            removaFilme(lst, i);
             break;
         }
 
@@ -236,6 +235,9 @@ main(int argc, char *argv[])
                 i->prox = j->prox;
                 libereFilme(j);
             }
+            lst->cab->prox = lst->cab;
+            lst->cab->ant = lst->cab;
+            libereFilme(i);
             break;
         }
 
