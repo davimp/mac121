@@ -63,15 +63,15 @@ achePalavra(unsigned char *pal, int tPal, unsigned char *texto, int tTex)
     int ult[256];
     int i, r, k;
     for(i = 0; i < 256; i++) ult[i] = 0;
-    for(i = 0; i < tPal; i++) ult[pal[i]] = i+1;
+    for(i = 0; i < tPal; i++) ult[tolower(pal[i])] = i+1;
 
-    k = tPal;
-    while(k <= tTex){
+    k = tPal - 1;
+    while(k < tTex){
         r = 0;
-        while(r < tPal && (pal[tPal-r-1] - texto[k-r] == 0)) r++;
+        while(r < tPal && (tolower(pal[tPal-r-1]) - tolower(texto[k-r]) == 0)) r++;
         if(r == tPal) return TRUE;
-        if(k == tTex) k++;
-        else k += tPal - ult[texto[k+1]] + 1; 
+        if(k == tTex - 1) k++;
+        else k += tPal - ult[tolower(texto[k+1])] + 1;
     }
     return FALSE;
 }

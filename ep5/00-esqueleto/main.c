@@ -53,6 +53,7 @@ static char  leiaOpcao();
 int 
 main(int argc, char *argv[])
 {
+    int tamanho;
     char *palavra;
     unsigned char *upalavra, *unome;
     Filme *i, *j;
@@ -104,6 +105,16 @@ main(int argc, char *argv[])
         /*---------------------------------------------*/
         case PROCURAR:
         {
+            printf("Digite parte do nome do filme a ser procurado: ");
+            palavra = mallocSafe(sizeof(char)*(TAM_STR + 1));             
+            tamanho = leiaString(palavra, TAM_STR);
+            i = lst->cab->prox;
+            while(i != lst->cab)
+            {
+                if(achePalavra(palavra, tamanho, i->nome, strlen(i->nome))) break;
+                else i = i->prox;
+            }
+            if(i != lst->cab) printf("%d\n", i->nota);
             break;
         }
 
@@ -170,27 +181,29 @@ main(int argc, char *argv[])
         case REMOVER:
         {
             printf("Digite parte do nome do filme a ser procurado: ");
-            leiaString(palavra, 4);
+            palavra = mallocSafe(sizeof(char)*(TAM_STR + 1));             
+            tamanho = leiaString(palavra, TAM_STR);
             i = lst->cab->prox;
-
             while(i != lst->cab)
             {
-                if(achePalavra(palavra, 4, i->nome, strlen(i->nome))) break;
-                i = i->prox;
+                if(achePalavra(palavra, tamanho, i->nome, strlen(i->nome))) break;
+                else i = i->prox;
             }
-            removaFilme(lst, i);
+            if(i != lst->cab) removaFilme(lst, i);
             break;
         }
 
         /*---------------------------------------------*/
         case ORDENAR_NOTA_M:
         {
+            mergeSortFilmes(lst, NOTA);
             break;
         }
 
         /*---------------------------------------------*/
         case ORDENAR_NOME_M:
         {
+            mergeSortFilmes(lst, NOME);
             break;
         }
 

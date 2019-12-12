@@ -207,13 +207,62 @@ removaFilme(ListaFilmes *lst, Filme *flm)
     Filme *i;
     Filme *anterior, *proximo;
     i = lst->cab->prox;
-    while(!strcmp(i->nome, flm->nome)) i = i->prox;
+    while(i != lst->cab && strcmp(i->nome, flm->nome)) i = i->prox;
     anterior = i->ant;
     proximo = i->prox;
     anterior->prox = proximo;
     proximo->ant = anterior;
     libereFilme(i);
     (lst->nFilmes)--;
+}
+
+
+/*--------------------------------- */
+
+void intercala(ListaFilmes* lst, ListaFilmes* q, Criterio criterio){
+    Filme *i, *j;
+    i = lst->cab->prox;
+    j = q->cab->prox;
+    if(criterio == NOTA){
+        while(i != lst->cab && j != q->cab){
+            if(i->nota >= j->nota){
+                i = i->prox;
+            }
+            else if(i->nota < j->nota){
+                j = j->prox;
+                j->ant->ant = i->ant;
+                i->ant->prox = j->ant;
+                i->ant = j->ant;
+                j->ant->prox = i;
+            }
+        }
+        if(j != q->cab){
+            lst->cab->ant->prox = j;
+            j->ant = lst->cab->ant;
+            lst->cab->ant = q->cab->ant;
+            lst->cab->ant->prox = lst->cab;
+        }
+    }
+    else{
+         while(i != lst->cab && j != q->cab){
+            if(strCmp(i->nome, j->nome) <= 0){
+                i = i->prox;
+            }
+            else if(strCmp(i->nome, j->nome) > 0){
+                j = j->prox;
+                j->ant->ant = i->ant;
+                i->ant->prox = j->ant;
+                i->ant = j->ant;
+                j->ant->prox = i;
+            }
+        }
+        if(j != q->cab){
+            lst->cab->ant->prox = j;
+            j->ant = lst->cab->ant;
+            lst->cab->ant = q->cab->ant;
+            lst->cab->ant->prox = lst->cab;
+        }
+    }
 }
 
 /*----------------------------------------------------------------------
@@ -251,21 +300,31 @@ removaFilme(ListaFilmes *lst, Filme *flm)
 void 
 mergeSortFilmes(ListaFilmes *lst, Criterio criterio)
 {
-    AVISO(mergeSortFilmes em filmes.c:  Vixe ainda nao fiz essa funcao...);
     ListaFilmes *q;
     Filme *i;
     int cont = 0;
     if(lst->nFilmes <= 1) return;
-    q->cab = mallocSafe(sizeof(ListaFilmes));
+    q = crieListaFilmes();
     i = lst->cab->prox;
     for(cont = 1; cont <= (lst->nFilmes)/2; cont++) i = i->prox;
     q->cab->prox = i;
-    q->nFilmes = (2*(lst->nFilmes)-1)/2;
+    q->cab->ant = lst->cab->ant;
+    lst->cab->ant->prox = q->cab;
+    lst->cab->ant = i->ant;
+    i->ant = q->cab;
+    lst->cab->ant->prox = lst->cab;
+
+    q->nFilmes = lst->nFilmes - (lst->nFilmes)/2;
     lst->nFilmes = (lst->nFilmes)/2;
+
     mergeSortFilmes(lst, criterio);
     mergeSortFilmes(q, criterio);
+
+    lst->nFilmes = lst->nFilmes + q->nFilmes;
     /* intercala */
-    
+    intercala(lst, q, criterio);
+    libereFilme(q->cab);
+    free(q);
 }
 
 /*----------------------------------------------------------------------
