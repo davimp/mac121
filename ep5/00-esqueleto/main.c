@@ -56,7 +56,6 @@ main(int argc, char *argv[])
     char c;
     int tamanho;
     char *palavra;
-    unsigned char *upalavra, *unome;
     Filme *i, *j;
     ListaFilmes *lst = crieListaFilmes(); 
     char         opcao;
@@ -113,10 +112,10 @@ main(int argc, char *argv[])
             while(i != lst->cab)
             {
                 c = 'c';
-                if(achePalavra(palavra, tamanho, i->nome, strlen(i->nome))){
+                if(achePalavra((unsigned char *)palavra, tamanho, (unsigned char *)i->nome, strlen(i->nome))){
                     mostreFilme(i);
                     printf("Esse e' o filme procurado? [s/n/x] (x para sair): ");
-                    fscanf(stdin, "%c", &c);
+                    fscanf(stdin, " %c", &c);
                     if(c == 's' || c == 'x') break;
                     else i = i->prox;
                 }
@@ -196,10 +195,10 @@ main(int argc, char *argv[])
             i = lst->cab->prox;
             while(i != lst->cab)
             {
-                if(achePalavra(palavra, tamanho, i->nome, strlen(i->nome))){
+                if(achePalavra((unsigned char *)palavra, tamanho, (unsigned char *)i->nome, strlen(i->nome))){
                     mostreFilme(i);
                     printf("Esse e' o filme procurado? [s/n/x] (x para sair):)\n");
-                    scanf("%c", &c);
+                    scanf(" %c", &c);
                     if(c == 's' || c == 'x') break;
                     else i = i->prox;
                 }
@@ -240,6 +239,7 @@ main(int argc, char *argv[])
         /*---------------------------------------------*/
         case MOSTRAR:
         {
+            mergeSortFilmes(lst, NOTA);
             mostreListaFilmes(lst);
             break;
         }
@@ -247,12 +247,15 @@ main(int argc, char *argv[])
         /*---------------------------------------------*/
         case MOSTRAR_MENOR:
         {
+            mergeSortFilmes(lst, NOTA);
+            mostreMelhoresFilmes(lst);
             break;
         }
 
         /*---------------------------------------------*/
         case MOSTRAR_MAIOR:
         {
+            mostrePioresFilmes(lst);
             break;
         }
       
@@ -295,7 +298,6 @@ main(int argc, char *argv[])
     } 
     while (opcao != SAIR);
 
-    freeST(); 
 
     return 0;
 }

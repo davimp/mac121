@@ -426,13 +426,17 @@ mostreListaFilmes(ListaFilmes *lst)
 void 
 mostreMelhoresFilmes(ListaFilmes *lst)
 {
-    AVISO(mostreMelhores:  Vixe ainda nao fiz essa funcao...);
-    int n, x, v, c;
+    int n, x, v;
     Filme *i;
-    c = scanf("%d %d %d", &n, &x, &v);
-    i = lst->cab->prox;
+    printf("Qual o numero de filmes a serem mostrado: ");
+    scanf("%d", &n);
+    printf("Qual a nota maxima: ");
+    scanf("%d", &x);
+    printf("Qual o numero minimo de votos: ");
+    scanf("%d", &v);
+    i = lst->cab->prox;  
     while(n && i != lst->cab){
-        if(i->nota <= x && i->votos >= v)
+        if(i->nota < x && i->votos >= v)
         {
             mostreFilme(i);
             n--;
@@ -460,13 +464,18 @@ mostreMelhoresFilmes(ListaFilmes *lst)
 void 
 mostrePioresFilmes(ListaFilmes *lst)
 {
-    AVISO(mostrePiores:  Vixe ainda nao fiz essa funcao...);
-    int n, x, v, c;
+    int n, x, v;
     Filme *i;
-    c = scanf("%d %d %d", &n, &x, &v);
+    printf("Qual o numero de filmes a serem mostrado: ");
+    scanf("%d", &n);
+    printf("Qual a nota minima: ");
+    scanf("%d", &x);
+    printf("Qual o numero minimo de votos: ");
+    scanf("%d", &v);    
+
     i = lst->cab->ant;
     while(n && i != lst->cab){
-        if(i->nota >= x && i->votos >= v)
+        if(i->nota > x && i->votos >= v)
         {
             mostreFilme(i);
             n--;
