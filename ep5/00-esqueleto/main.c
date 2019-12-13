@@ -53,6 +53,7 @@ static char  leiaOpcao();
 int 
 main(int argc, char *argv[])
 {
+    char c;
     int tamanho;
     char *palavra;
     unsigned char *upalavra, *unome;
@@ -111,10 +112,19 @@ main(int argc, char *argv[])
             i = lst->cab->prox;
             while(i != lst->cab)
             {
-                if(achePalavra(palavra, tamanho, i->nome, strlen(i->nome))) break;
+                c = 'c';
+                if(achePalavra(palavra, tamanho, i->nome, strlen(i->nome))){
+                    mostreFilme(i);
+                    printf("Esse e' o filme procurado? [s/n/x] (x para sair): ");
+                    fscanf(stdin, "%c", &c);
+                    if(c == 's' || c == 'x') break;
+                    else i = i->prox;
+                }
                 else i = i->prox;
             }
-            if(i != lst->cab) printf("%d\n", i->nota);
+            if(c == 'x') break;
+            else if(i != lst->cab) printf("a nota do filme procurado e': (%f)\n", i->nota);
+            else printf("O filme nao foi achado\n");
             break;
         }
 
@@ -186,10 +196,18 @@ main(int argc, char *argv[])
             i = lst->cab->prox;
             while(i != lst->cab)
             {
-                if(achePalavra(palavra, tamanho, i->nome, strlen(i->nome))) break;
+                if(achePalavra(palavra, tamanho, i->nome, strlen(i->nome))){
+                    mostreFilme(i);
+                    printf("Esse e' o filme procurado? [s/n/x] (x para sair):)\n");
+                    scanf("%c", &c);
+                    if(c == 's' || c == 'x') break;
+                    else i = i->prox;
+                }
                 else i = i->prox;
             }
-            if(i != lst->cab) removaFilme(lst, i);
+            if(c == 'x') break;
+            else if(i != lst->cab) removaFilme(lst, i);
+            else printf("O filme nao foi achado\n");
             break;
         }
 
