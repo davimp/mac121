@@ -111,16 +111,18 @@ crieListaFilmes()
 void
 libereListaFilmes(ListaFilmes *lst)
 {
-    Filme *proximo;
+    Filme *j;
     Filme *i;
     i = lst->cab->prox;
-    while(i != lst->cab->prox)
+    while(i->prox != lst->cab)
     {
-        proximo = i->prox;
-        i->prox = proximo->prox;
-        libereFilme(proximo);
-        i = i->prox;
+        j = i->prox;
+        i->prox = j->prox;
+        libereFilme(j);
     }
+    libereFilme(i);
+    free(lst->cab);
+    free(lst);
 }
 
 /*----------------------------------------------------------------------
@@ -321,11 +323,13 @@ mergeSortFilmes(ListaFilmes *lst, Criterio criterio)
     mergeSortFilmes(q, criterio);
 
     lst->nFilmes = lst->nFilmes + q->nFilmes;
-    /* intercala */
+
     intercala(lst, q, criterio);
     libereFilme(q->cab);
     free(q);
 }
+
+
 
 /*----------------------------------------------------------------------
  *  quickSortFilmes [opcional]

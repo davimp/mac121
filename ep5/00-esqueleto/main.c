@@ -278,6 +278,7 @@ main(int argc, char *argv[])
         /*---------------------------------------------*/
         case SAIR:
         {
+            libereListaFilmes(lst);
             break;
         }
 
@@ -297,6 +298,7 @@ main(int argc, char *argv[])
         printf("\n(%g segundos)\n", elapsed);
     } 
     while (opcao != SAIR);
+
 
 
     return 0;
